@@ -304,19 +304,25 @@ public class Menu {
         this.usuarios.put("AirGaia", usuario4);
 
         Post post1 = new Post("¡Hola, esta es mi primera publicación!", usuario1.getNombreUsuario(), "post1", new Date());
-        Post post2 = new Post("¡Hola, andaré por aquí!", usuario1.getNombreUsuario(), "post1", new Date());
+        Post post2 = new Post("¡Hola, andaré por aquí!", usuario1.getNombreUsuario(), "post2", new Date());
 
-        String contenidoComentario = "¡Hola jua, que bueno que estés por aquí!";
-        String idComentario = "comentario1";
+        String contenidoComentarioPost1 = "¡Hola jua, que bueno que estés por aquí!";
+        String idComentarioPost1 = "comentario1";
+        String contenidoComentarioPost2 = "¡Qué bien ver que estás activo en la comunidad!";
+        String idComentarioPost2 = "comentario2";
+
         usuario1.getPosts().add(post1);
         usuario1.getPosts().add(post2);
 
-        Comentario comentarioJuan = new Comentario(contenidoComentario, "anita", idComentario);
-        Post postDeJuan = usuario1.getPosts().get(0);
-        postDeJuan.agregarComentario(comentarioJuan);
+        Comentario comentarioAnita = new Comentario(contenidoComentarioPost1, "anita", idComentarioPost1);
+        Post postDeJuan1 = usuario1.getPosts().get(0);
+        postDeJuan1.agregarComentario(comentarioAnita);
+        Comentario comentarioAirGaia = new Comentario(contenidoComentarioPost2, "AirGaia", idComentarioPost2);
+        Post postDeJuan2 = usuario1.getPosts().get(1);
+        postDeJuan2.agregarComentario(comentarioAirGaia);
 
     }
-    public void mostrarListaUsuarios () {
+    public static void mostrarListaUsuarios() {
         for (String key : usuarios.keySet()) {
             System.out.println(key);
         }

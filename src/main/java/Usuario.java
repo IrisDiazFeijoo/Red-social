@@ -61,12 +61,24 @@ public class Usuario {
         siguiendo.remove(nombreUsuarioASeguir);
 
     }
+    public void mostrarUsuariosSeguidos() {
+        if (siguiendo.isEmpty()) {
+            System.out.println("No estás siguiendo a ningún usuario.");
+        } else {
+            System.out.println("Estás siguiendo a los siguientes usuarios:");
+            for (String usuario : siguiendo) {
+                System.out.println("- " + usuario);
+            }
+        }
+    }
 
     public static void seguirUsuario(Usuario usuarioActual) {
         if (usuarioActual == null) {
             System.out.println("Debes iniciar sesión para seguir a alguien.");
             return;
         }
+
+        Menu.mostrarListaUsuarios();
         String nombreUsuarioASeguir = Utils.string("Nombre del usuario que deseas seguir: ");
 
         Usuario usuarioASeguir = Menu.getUsuarios().get(nombreUsuarioASeguir);
@@ -88,6 +100,10 @@ public class Usuario {
         if (usuarioActual == null) {
             System.out.println("Debes iniciar sesión para dejar de seguir a alguien.");
             return;
+        }
+        usuarioActual.mostrarUsuariosSeguidos();
+        if (usuarioActual.siguiendo.isEmpty()) {
+            return; // Salimos si no está siguiendo a nadie
         }
         String nombreUsuarioADejarDeSeguir = Utils.string("Nombre del usuario que deseas dejar de seguir: ");
 
@@ -112,10 +128,8 @@ public class Usuario {
     }
 
     public void eliminarPost() {
-        Scanner scanner = new Scanner(System.in);
         mostrarPostConId();
-        System.out.print("Escribe el ID del post a eliminar: ");
-        String id = scanner.nextLine();
+        String id = Utils.string("Escribe el ID del post a eliminar: ");
         posts.removeIf(post -> post.getId().equals(id));
         System.out.println("Post eliminado con éxito.");
     }
@@ -142,7 +156,7 @@ public class Usuario {
         if (postSeleccionado.getComentarios().isEmpty()) {
             System.out.println("El post seleccionado no tiene comentarios.");
         } else {
-            System.out.println("Comentarios en el post con ID " + postId + ":");
+            System.out.println("Comentarios en el post " + postId + ":");
             postSeleccionado.mostrarComentarioConId();
         }
     }
@@ -158,9 +172,7 @@ public class Usuario {
 
 
     public void agregarComentarioAPost() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Ingresa el nombre de usuario a quien quieres comentar: ");
-        String nombreUsuario = scanner.nextLine();
+        String nombreUsuario = Utils.string("Ingresa el nombre de usuario a quien quieres comentar: ");
 
         Usuario usuarioSeleccionado = Usuario.getUsuarios().get(nombreUsuario);
         if (usuarioSeleccionado == null) {
@@ -180,8 +192,7 @@ public class Usuario {
             System.out.println((i + 1) + ". ID: " + post.getId() + " | Contenido: " + post.getContenido());
         }
 
-        System.out.print("Escribe el ID del post al que deseas comentar: ");
-        String postId = scanner.nextLine();
+        String postId = Utils.string("Escribe el ID del post al que deseas comentar: ");
         Post postSeleccionado= null;
 
         for (Post post : postsUsuario) {
@@ -195,8 +206,7 @@ public class Usuario {
             System.out.println("No se encontró un post con ese ID.");
             return;
         }
-        System.out.print("Escribe tu comentario: ");
-        String contenidoComentario = scanner.nextLine();
+        String contenidoComentario = Utils.string("Escribe tu comentario: ");
         String idComentario = "comentario " + (postSeleccionado.getComentarios().size() + 1);
         Comentario nuevoComentario = new Comentario(contenidoComentario, this.nombreUsuario, idComentario);
         postSeleccionado.agregarComentario(nuevoComentario);
@@ -210,9 +220,7 @@ public class Usuario {
             return;
         }
         mostrarPostConId();
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Introduce el ID del post cual deseas eliminar un comentario:");
-        String postId = scanner.nextLine();
+        String postId = Utils.string("Introduce el ID del post cual deseas eliminar un comentario:");
         Post postSeleccionado = buscarPostPorId(postId);
 
         if (postSeleccionado == null) {
@@ -223,14 +231,11 @@ public class Usuario {
             System.out.println("El post seleccionado no tiene comentarios.");
             return;
         }
-
         postSeleccionado.mostrarComentarioConId();
-        System.out.print("Escribe el ID del comentario que deseas eliminar: ");
-        String comentarioId = scanner.nextLine();
+        String comentarioId = Utils.string("Escribe el ID del comentario que deseas eliminar: ");
         Comentario comentarioAEliminar = buscarComentarioPorId(comentarioId, postSeleccionado);
         if (comentarioAEliminar != null) {
             postSeleccionado.eliminarComentario(comentarioId);
-            System.out.println("Comentario eliminado con éxito.");
         } else {
             System.out.println("No se encontró un comentario con el ID especificado.");
         }
@@ -240,6 +245,7 @@ public class Usuario {
     public Comentario buscarComentarioPorId(String comentarioId, Post post) {
         for (Comentario comentario : post.getComentarios()) {
             if (comentario.getIdComentario().equals(comentarioId)) {
+                System.out.println("Autor: " + comentario.getAutor());
                 return comentario;
             }
         }

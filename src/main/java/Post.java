@@ -64,7 +64,7 @@ public class Post {
             return;
         }
         for (Comentario comentario : comentarios) {
-            System.out.println("ID: " + comentario.getIdComentario() + ", Contenido: " + comentario.getContenido());
+            System.out.println("ID: " + comentario.getIdComentario() + ", Autor: " + comentario.getAutor() + ", Contenido: " + comentario.getContenido());
         }
     }
     public int getNumeroComentarios(){
