@@ -128,19 +128,19 @@ public class Usuario {
     }
 
     public void eliminarPost() {
+        if (posts.isEmpty()) {
+            System.out.println("No tienes posts.");
+            return;
+        }
         mostrarPostConId();
         String id = Utils.string("Escribe el ID del post a eliminar: ");
         posts.removeIf(post -> post.getId().equals(id));
         System.out.println("Post eliminado con éxito.");
     }
     public void mostrarPostConId(){
-        if (posts.isEmpty()){
-            System.out.println("No tienes posts");
-            return;
-        }
         System.out.println("Posts: ");
         for (Post post: posts){
-            System.out.println("ID: " + post.getId() + " Contenido: " + post.getContenido());
+            System.out.println("ID: " + post.getId() + " Contenido: " + post.toString());
         }
 
     }
@@ -172,6 +172,7 @@ public class Usuario {
 
 
     public void agregarComentarioAPost() {
+        Menu.mostrarListaUsuarios();
         String nombreUsuario = Utils.string("Ingresa el nombre de usuario a quien quieres comentar: ");
 
         Usuario usuarioSeleccionado = Usuario.getUsuarios().get(nombreUsuario);
@@ -189,7 +190,7 @@ public class Usuario {
         List<Post> postsUsuario = usuarioSeleccionado.getPosts();
         for (int i = 0; i < postsUsuario.size(); i++) {
             Post post = postsUsuario.get(i);
-            System.out.println((i + 1) + ". ID: " + post.getId() + " | Contenido: " + post.getContenido());
+            System.out.println((i + 1) + ". ID: " + post.getId() + " | Contenido: " + post.toString());
         }
 
         String postId = Utils.string("Escribe el ID del post al que deseas comentar: ");
@@ -263,6 +264,33 @@ public class Usuario {
     public List<Post> getPosts() {
         return posts;
     }
+    public void  MostrarMuro(){
+        if (siguiendo.isEmpty()) {
+            System.out.println("No estás siguiendo a ningún usuario. Tu muro está vacío.");
+            return;
+        }
+        List<Post> postsDeSeguidos = new ArrayList<>();
+        for (String nombreUsuarioSeguido : siguiendo) {
+            Usuario usuarioSeguido = Menu.getUsuarios().get(nombreUsuarioSeguido);
+
+            if (usuarioSeguido != null) {
+                postsDeSeguidos.addAll(usuarioSeguido.getPosts());
+            }
+        }
+        postsDeSeguidos.sort((p1, p2) -> p2.getFecha().compareTo(p1.getFecha()));
+        System.out.println("Muro de " + this.nombreUsuario);
+        for (int i = 0; i < Math.min(10, postsDeSeguidos.size()); i++) {
+            Post post = postsDeSeguidos.get(i);
+            System.out.println("Autor: " + post.getAutor());
+            System.out.println("Fecha: " + post.getFecha());
+            System.out.println(post.toString());
+            System.out.println("----");
+        }
+
+        if (postsDeSeguidos.isEmpty()) {
+            System.out.println("No hay publicaciones recientes en tu muro.");
+        }
+    }
 
     @Override
     public String toString() {
@@ -276,4 +304,5 @@ public class Usuario {
     public void setContraseña(String contraseña) {
         this.contraseña = contraseña;
     }
+
 }

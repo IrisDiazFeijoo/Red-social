@@ -4,22 +4,17 @@ import java.util.Date;
 import java.util.List;
 
 public class Post {
-    private String contenido;
     private String autor;
     private String id;
     private Date fecha;
     public  List<Comentario> comentarios;
 
-    public Post(String contenido, String autor, String id, Date fecha) {
+    public Post(String autor, String id, Date fecha) {
         this.autor = autor;
         this.id = id;
         this.fecha = new Date();// Para que me de la fecha actual
         this.comentarios = new ArrayList<>();
-        this.contenido = contenido;
-    }
 
-    public String getContenido() {
-        return contenido;
     }
 
     public String getAutor() {

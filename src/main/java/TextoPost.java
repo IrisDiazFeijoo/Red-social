@@ -3,12 +3,19 @@ import java.util.Date;
 public class TextoPost extends Post {
 
 
+    private String contenido;
+
     public TextoPost(String contenido, String autor, String id, Date fecha) {
-        super(contenido, autor, id, fecha);
+        super( autor, id, fecha);
+        this.contenido = contenido;
 
     }
     @Override
     public String toString() {
-        return "TextoPost: " + getContenido();
+        return "Contenido: " + contenido;
     }
+    public String getContenido() {
+        return contenido;
+    }
+
 }

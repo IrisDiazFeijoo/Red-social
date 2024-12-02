@@ -44,12 +44,11 @@ public class Menu {
                 System.out.println("3. Agregar un comentario a post");
                 System.out.println("4. Eliminar comentario");
                 System.out.println("5. Ver posts y comentarios");
-                System.out.println("6. Seguir a un usuario");
-                System.out.println("7. Dejar de seguir a un usuario");
-                System.out.println("8. Eliminar usuario");
-                System.out.println("9. Mostrar lista de usuarios");
+                System.out.println("6. Ver muro");
+                System.out.println("7. Seguir a un usuario");
+                System.out.println("8. Dejar de seguir a un usuario");
+                System.out.println("9. Eliminar usuario");
                 System.out.println("10. Salir");
-                System.out.println("Elige una opción: ");
                 opcion = Utils.integer("Selecciona una opción: ");
 
                 switch (opcion) {
@@ -74,16 +73,15 @@ public class Menu {
                                 String tituloImagen = Utils.string("Escribe el título de la imagen: ");
                                 int ancho = Utils.integer("Ingresa el ancho de la imagen: ");
                                 int alto = Utils.integer("Ingresa el alto de la imagen: ");
-                                ImagenPost imagenPost = new ImagenPost("Post de imagen", usuarioActual.getNombreUsuario(), idPost, new Date(), tituloImagen, ancho, alto);
+                                ImagenPost imagenPost = new ImagenPost(tituloImagen, ancho, alto, usuarioActual.getNombreUsuario(), idPost, new Date());
                                 usuarioActual.agregarPost(imagenPost);
                                 System.out.println("Post de imagen creado con éxito.");
                                 break;
                             case 3:
                                 String tituloVideo = Utils.string("Escribe el título del video: ");
-                                System.out.print("Ingresa la duración del video (en segundos): ");
                                 int duracion = Utils.integer("Ingresa la duración del video (en segundos): ");
-                                String calidad = Utils.string("Especifica la calidad del video (por ejemplo, 720p, 1080p ");
-                                VideoPost videoPost = new VideoPost("Post de video", usuarioActual.getNombreUsuario(), idPost, new Date(), tituloVideo, duracion, calidad);
+                                String calidad = Utils.string("Especifica la calidad del video (por ejemplo, 720p, 1080p) ");
+                                VideoPost videoPost = new VideoPost(usuarioActual.getNombreUsuario(), idPost, new Date(), tituloVideo, duracion, calidad);
                                 usuarioActual.agregarPost(videoPost);
                                 System.out.println("Post de video creado con éxito.");
                                 break;
@@ -116,24 +114,24 @@ public class Menu {
                         verPostsYComentarios();
                         break;
                     case 6:
-                        Usuario.seguirUsuario(usuarioActual);
+                        usuarioActual.MostrarMuro();
                         break;
                     case 7:
+                        Usuario.seguirUsuario(usuarioActual);
+                        break;
+                    case 8:
                         if (usuarioActual != null) {
                             usuarioActual.dejarDeSeguirUsuario(usuarioActual);
                         } else {
                             System.out.println("No estás logueado. Debes iniciar sesión primero.");
                         }
                         break;
-                    case 8:
+                    case 9:
                         if (usuarioActual != null) {
                             eliminarUsuario();
                         } else {
                             System.out.println("No estás logueado. Debes iniciar sesión primero.");
                         }
-                        break;
-                    case 9:
-                        mostrarListaUsuarios ();
                         break;
                     case 10:
                         System.out.println("¡Hasta luego!");
@@ -269,9 +267,10 @@ public class Menu {
             return;
         }
         for(Post post: usuarioActual.getPosts()){
-            System.out.println("Post: " + post.getContenido());
+            System.out.println("\n----------------------");
             System.out.println("Autor: " + post.getAutor());
             System.out.println("Fecha: " + post.getFecha());
+            System.out.println(post.toString());
             if (post.getComentarios().isEmpty()) {
                 System.out.println("No hay comentarios en este post.");
             } else {
@@ -303,16 +302,42 @@ public class Menu {
         this.usuarios.put("Adri.m", usuario3);
         this.usuarios.put("AirGaia", usuario4);
 
-        Post post1 = new Post("¡Hola, esta es mi primera publicación!", usuario1.getNombreUsuario(), "post1", new Date());
-        Post post2 = new Post("¡Hola, andaré por aquí!", usuario1.getNombreUsuario(), "post2", new Date());
+        //Posts de Juanperez
 
-        String contenidoComentarioPost1 = "¡Hola jua, que bueno que estés por aquí!";
+        Post post1 = new TextoPost("Hola mundo! Este es mi primer post", usuario1.getNombreUsuario(), "post1", new Date());
+        Post post2 = new TextoPost("Hola, estaré por aquí a partir de ahora!", usuario1.getNombreUsuario(), "post2", new Date());
+        Post post3 = new ImagenPost("El solpor gallego",60,120,"juanperez","post3",new Date());
+
+        //Posts de anita
+
+        Post post4 =new TextoPost("Hola! Mi nomre es anita y disfurto con el contenido audiovisual",usuario2.getNombreUsuario(),"post4",new Date());
+        Post post5 = new ImagenPost("Un atarceder en Fisterra",600,500,"anita","post5",new Date());
+
+        //posts de airGaia
+
+        Post post6 =new TextoPost("Hola gente, soy AirGaia y soy una fanática del deporte.",usuario4.getNombreUsuario(),"post6",new Date());
+
+        String contenidoComentarioPost1 = "¡Hola juan, que bueno que estés por aquí!";
         String idComentarioPost1 = "comentario1";
         String contenidoComentarioPost2 = "¡Qué bien ver que estás activo en la comunidad!";
         String idComentarioPost2 = "comentario2";
+        String contenidoComentarioPost3 = "¡Qué foto más bonita!";
+        String idComentarioPost3 = "comentario3";
+
+        String contenidoComentarioPost4 = "Hola Ana, me encantará ver tu contenido!";
+        String idComentarioPost4 = "Comentario1";
+        String contenidoComentarioPost5 = "Hola Ana, me encantará ver tu contenido!";
+        String idComentarioPost5 = "Que imagen más bonita anita, es un sitio genial para ver el atardecer";
+
 
         usuario1.getPosts().add(post1);
         usuario1.getPosts().add(post2);
+        usuario1.getPosts().add(post3);
+
+        usuario2.getPosts().add(post4);
+        usuario2.getPosts().add(post5);
+
+        usuario4.getPosts().add(post6);
 
         Comentario comentarioAnita = new Comentario(contenidoComentarioPost1, "anita", idComentarioPost1);
         Post postDeJuan1 = usuario1.getPosts().get(0);
@@ -320,6 +345,30 @@ public class Menu {
         Comentario comentarioAirGaia = new Comentario(contenidoComentarioPost2, "AirGaia", idComentarioPost2);
         Post postDeJuan2 = usuario1.getPosts().get(1);
         postDeJuan2.agregarComentario(comentarioAirGaia);
+        Comentario comentarioAdriM = new Comentario(contenidoComentarioPost3, "Adri.m", idComentarioPost3);
+        Post postDeJuan3 = usuario1.getPosts().get(2);
+        postDeJuan3.agregarComentario(comentarioAdriM);
+
+        Comentario comentarioJuanPerez = new Comentario(contenidoComentarioPost5, "juanperez", idComentarioPost5);
+        Post postDeAnita1 = usuario2.getPosts().get(0);
+        postDeAnita1.agregarComentario(comentarioJuanPerez);
+
+
+        usuario1.seguir("anita");
+        usuario2.agregarSeguidor("juanperez");
+        usuario1.seguir("AirGaia");
+        usuario4.agregarSeguidor("juanperez");
+        usuario1.seguir("Adri.m");
+        usuario3.agregarSeguidor("juanperez");
+
+
+        usuario2.seguir("juanperez");
+        usuario1.agregarSeguidor("anita");
+        usuario2.seguir("Adri.m");
+        usuario3.agregarSeguidor("anita");
+        usuario2.seguir("AirGaia");
+        usuario4.agregarSeguidor("anita");
+
 
     }
     public static void mostrarListaUsuarios() {
